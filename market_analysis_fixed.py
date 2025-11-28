@@ -489,8 +489,8 @@ class FoodMarketAnalysis:
         """Market Opportunities"""
         print("→ Chart 6: Market Opportunities...")
 
-        fig = plt.figure(figsize=(18, 12))
-        gs = fig.add_gridspec(3, 2, hspace=0.4, wspace=0.3)
+        fig = plt.figure(figsize=(18, 10))
+        gs = fig.add_gridspec(2, 2, hspace=0.35, wspace=0.3)
         fig.suptitle('Market Opportunities & Strategic Gaps',
                      fontsize=20, fontweight='bold', y=0.98)
 
@@ -584,47 +584,6 @@ class FoodMarketAnalysis:
             ax4.text(width + 0.05, bar.get_y() + bar.get_height()/2.,
                     f'{width:.2f}★', ha='left', va='center',
                     fontweight='bold', fontsize=9)
-
-        # 5. Summary text box
-        ax5 = fig.add_subplot(gs[2, :])
-        ax5.axis('off')
-
-        total_discounted = len(self.df[self.df['has_discount'] == True])
-        avg_discount = self.df[self.df['has_discount'] == True]['discount_percentage'].mean()
-        total_categories = self.df['category_name'].nunique()
-        total_brands = len(self.df[self.df['brand'] != 'N/A']['brand'].unique())
-
-        summary_text = f"""
-KEY MARKET OPPORTUNITIES
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📊 MARKET OVERVIEW:
-• Total Products: {len(self.df):,}  |  Categories: {total_categories}  |  Brands: {total_brands}
-• Products with Discounts: {total_discounted:,} ({total_discounted/len(self.df)*100:.1f}%)
-• Average Discount: {avg_discount:.1f}%
-
-🎯 TOP STRATEGIC OPPORTUNITIES:
-
-1. DISCOUNT COMPETITION: {avg_discount:.1f}% avg discount shows aggressive pricing environment
-   → Action: Enter categories with 30%+ discounts for competitive advantage
-
-2. UNDERSERVED NICHES: {len(underserved)} high-quality categories with limited products (<50)
-   → Action: Target low-competition, high-satisfaction segments
-
-3. PRICE OPTIMIZATION: High price variance signals opportunity for mid-market positioning
-   → Action: Fill pricing gaps between budget and premium offerings
-
-4. QUALITY IMPROVEMENT: Several high-volume categories have ratings below 3.5
-   → Action: Compete on quality in categories with dissatisfied customers
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-        """
-
-        ax5.text(0.5, 0.5, summary_text, ha='center', va='center',
-                fontsize=10, family='monospace', fontweight='bold',
-                bbox=dict(boxstyle='round,pad=1', facecolor='#f0f0f0',
-                         edgecolor='black', linewidth=2, alpha=0.9))
 
         plt.savefig(self.charts_dir / '06_market_opportunities.png', dpi=300, bbox_inches='tight')
         plt.close()
@@ -796,47 +755,6 @@ KEY MARKET OPPORTUNITIES
             ax3.text(width + 0.3, bar.get_y() + bar.get_height()/2.,
                     f'{int(width)}', ha='left', va='center',
                     fontweight='bold', fontsize=9)
-
-        # 4. Market concentration metrics
-        ax4 = fig.add_subplot(gs[1, 2])
-        ax4.axis('off')
-
-        total_products = len(self.df)
-        total_categories = self.df['category_name'].nunique()
-        total_brands = len(self.df[self.df['brand'] != 'N/A']['brand'].unique())
-        avg_products_per_cat = total_products / total_categories
-        avg_price = self.df['retail_price'].mean()
-        median_price = self.df['retail_price'].median()
-
-        top_5_cat_share = (self.df['category_name'].value_counts().head(5).sum() / total_products * 100)
-        top_10_brand_share = (self.df[self.df['brand'] != 'N/A']['brand'].value_counts().head(10).sum() / len(self.df[self.df['brand'] != 'N/A']) * 100)
-
-        metrics_text = f"""
-MARKET METRICS
-
-━━━━━━━━━━━━━━━━━━━━
-
-📊 ASSORTMENT:
-Products: {total_products:,}
-Categories: {total_categories}
-Brands: {total_brands}
-
-📈 AVERAGES:
-Prod/Category: {avg_products_per_cat:.1f}
-Avg Price: {avg_price:.2f} AZN
-Median Price: {median_price:.2f} AZN
-
-🎯 CONCENTRATION:
-Top 5 Categories: {top_5_cat_share:.1f}%
-Top 10 Brands: {top_10_brand_share:.1f}%
-
-━━━━━━━━━━━━━━━━━━━━
-        """
-
-        ax4.text(0.5, 0.5, metrics_text, ha='center', va='center',
-                fontsize=11, family='monospace', fontweight='bold',
-                bbox=dict(boxstyle='round,pad=0.8', facecolor='#e8f4f8',
-                         edgecolor='#2980b9', linewidth=2, alpha=0.9))
 
         plt.savefig(self.charts_dir / '08_product_assortment.png', dpi=300, bbox_inches='tight')
         plt.close()
